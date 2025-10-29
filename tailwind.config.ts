@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        priority: {
+          high: "hsl(var(--priority-high))",
+          "high-light": "hsl(var(--priority-high-light))",
+          medium: "hsl(var(--priority-medium))",
+          "medium-light": "hsl(var(--priority-medium-light))",
+          low: "hsl(var(--priority-low))",
+          "low-light": "hsl(var(--priority-low-light))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
