@@ -35,7 +35,8 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
   const studentItems = [
     { title: "Task's", url: "/dashboard", icon: CheckSquare },
     { title: "Calendar", url: "/calendar", icon: Calendar },
-    { title: "Student Dashboard", url: "/student-dashboard", icon: User },
+    { title: "Analytics", url: "/analytics", icon: BarChart3 },
+    { title: "My Classrooms", url: "/student-dashboard", icon: User },
   ];
 
   const items = userRole === "teacher" ? teacherItems : studentItems;

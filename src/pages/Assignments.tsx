@@ -79,8 +79,29 @@ const Assignments = () => {
     }
   };
 
-  const generateInvitationCode = () => {
-    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  const generateInvitationCode = async () => {
+    // Generate cryptographically secure code
+    const array = new Uint8Array(6);
+    crypto.getRandomValues(array);
+    const code = Array.from(array)
+      .map(b => b.toString(36).padStart(2, '0'))
+      .join('')
+      .substring(0, 8)
+      .toUpperCase();
+    
+    // Verify uniqueness
+    const { data: existing } = await supabase
+      .from('classrooms')
+      .select('id')
+      .eq('invitation_code', code)
+      .maybeSingle();
+    
+    // Regenerate if collision (unlikely but possible)
+    if (existing) {
+      return generateInvitationCode();
+    }
+    
+    return code;
   };
 
   const handleCreateClassroom = async (e: React.FormEvent) => {
@@ -89,7 +110,7 @@ const Assignments = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
 
-    const invitationCode = generateInvitationCode();
+    const invitationCode = await generateInvitationCode();
 
     const { error } = await supabase.from("classrooms").insert({
       teacher_id: session.user.id,
@@ -98,7 +119,8 @@ const Assignments = () => {
     });
 
     if (error) {
-      toast.error("Failed to create classroom");
+      console.error("Classroom creation error:", error);
+      toast.error("Failed to create classroom: " + error.message);
     } else {
       toast.success("Classroom created successfully!");
       setNewClassName("");

@@ -272,6 +272,24 @@ const Dashboard = () => {
                     </div>
 
                     <div>
+                      <Label>Select Classroom:</Label>
+                      <select
+                        value={selectedClassroom}
+                        onChange={(e) => setSelectedClassroom(e.target.value)}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                        required
+                      >
+                        <option value="">Select a classroom</option>
+                        {classrooms.map((classroom) => (
+                          <option key={classroom.id} value={classroom.id}>
+                            {classroom.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <Label>Due Date:</Label>
                       <Input
                         type="date"
                         placeholder="DD-MM-YYYY"
