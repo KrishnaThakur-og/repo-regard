@@ -78,17 +78,16 @@ const StudentDashboard = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
 
-    // Find classroom by invitation code
-    const { data: classroom, error: findError } = await supabase
-      .from("classrooms")
-      .select("id")
-      .eq("invitation_code", invitationCode.toUpperCase())
-      .maybeSingle();
+    // Find classroom by invitation code using secure function
+    const { data: classroomResult, error: findError } = await supabase
+      .rpc("get_classroom_by_invitation_code", { _code: invitationCode });
 
-    if (findError || !classroom) {
+    if (findError || !classroomResult || classroomResult.length === 0) {
       toast.error("Invalid invitation code");
       return;
     }
+
+    const classroom = { id: classroomResult[0].classroom_id };
 
     // Check if already a member
     const { data: existing } = await supabase

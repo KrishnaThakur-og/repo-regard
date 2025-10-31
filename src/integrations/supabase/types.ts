@@ -205,6 +205,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_classroom_by_invitation_code: {
+        Args: { _code: string }
+        Returns: {
+          classroom_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
