@@ -147,9 +147,22 @@ const Assignments = () => {
         return;
       }
 
+      // Optimistically add the new classroom to the UI
+      const newClassroom: Classroom = {
+        id: crypto.randomUUID(), // Temporary ID until we reload
+        name: parsed.data.name,
+        invitation_code: invitationCode,
+        created_at: new Date().toISOString(),
+        student_count: 0,
+      };
+      
+      setClassrooms(prev => [newClassroom, ...prev]);
+      
       toast.success("Classroom created successfully!");
       setNewClassName("");
       setShowCreateDialog(false);
+      
+      // Reload classrooms in the background to get the real data
       await loadClassrooms(session.user.id);
     } finally {
       setCreating(false);
