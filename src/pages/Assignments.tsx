@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Copy, Users, Plus, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { z } from "zod";
 
 interface Classroom {
   id: string;
@@ -18,6 +19,13 @@ interface Classroom {
   created_at: string;
   student_count?: number;
 }
+const classSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, "Name must be at least 3 characters")
+    .max(100, "Name must be at most 100 characters"),
+});
 
 const Assignments = () => {
   const navigate = useNavigate();
@@ -25,6 +33,7 @@ const Assignments = () => {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newClassName, setNewClassName] = useState("");
+  const [creating, setCreating] = useState(false);
   const [userRole, setUserRole] = useState<"teacher" | "student" | null>(null);
 
   useEffect(() => {
@@ -106,26 +115,44 @@ const Assignments = () => {
 
   const handleCreateClassroom = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
 
-    const invitationCode = await generateInvitationCode();
+    const parsed = classSchema.safeParse({ name: newClassName });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid classroom name");
+      return;
+    }
 
-    const { error } = await supabase.from("classrooms").insert({
-      teacher_id: session.user.id,
-      name: newClassName,
-      invitation_code: invitationCode,
-    });
+    setCreating(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate("/auth");
+        return;
+      }
 
-    if (error) {
-      console.error("Classroom creation error:", error);
-      toast.error("Failed to create classroom: " + error.message);
-    } else {
+      const invitationCode = await generateInvitationCode();
+
+      const { error } = await supabase.from("classrooms").insert({
+        teacher_id: session.user.id,
+        name: parsed.data.name,
+        invitation_code: invitationCode,
+      });
+
+      if (error) {
+        console.error("Classroom creation error:", error);
+        const message = error.message?.includes("row-level security")
+          ? "You don't have permission to create classrooms. Ensure your account role is set to 'teacher'."
+          : `Failed to create classroom: ${error.message}`;
+        toast.error(message);
+        return;
+      }
+
       toast.success("Classroom created successfully!");
       setNewClassName("");
       setShowCreateDialog(false);
       await loadClassrooms(session.user.id);
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -157,7 +184,7 @@ const Assignments = () => {
       <div className="min-h-screen flex w-full">
         <AppSidebar userRole={userRole || undefined} />
         <main className="flex-1 flex flex-col">
-          <header className="border-b bg-background px-6 py-4 flex items-center gap-4">
+          <header className="border-b bg-background px-6 py-4 flex items-center gap-4 bg-gradient-to-r from-primary/5 to-transparent">
             <SidebarTrigger />
             <h1 className="text-xl font-semibold">Classroom Management</h1>
           </header>
@@ -173,7 +200,7 @@ const Assignments = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {classrooms.map((classroom) => (
-                <Card key={classroom.id}>
+                <Card key={classroom.id} className="hover:shadow-lg transition-shadow border-primary/10 animate-fade-in">
                   <CardHeader>
                     <div className="flex justify-between items-start">
                       <div>
@@ -241,7 +268,7 @@ const Assignments = () => {
               />
             </div>
             <div className="flex gap-2">
-              <Button type="submit" className="flex-1">Create</Button>
+              <Button type="submit" className="flex-1" disabled={creating}>{creating ? "Creating..." : "Create"}</Button>
               <Button
                 type="button"
                 variant="outline"
