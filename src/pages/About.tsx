@@ -1,75 +1,181 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/AppSidebar";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, CheckSquare, Users, Calendar, Mail, Phone, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
+
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <AppSidebar />
-        <main className="flex-1 flex flex-col">
-          <header className="border-b bg-background px-6 py-4 flex items-center gap-4">
-            <SidebarTrigger />
-            <h1 className="text-xl font-semibold">About Us</h1>
-          </header>
-
-          <div className="flex-1 p-6">
-            <div className="max-w-2xl mx-auto space-y-6">
-              <div className="text-center mb-8">
-                <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <GraduationCap className="w-10 h-10 text-primary" />
-                </div>
-                <h2 className="text-3xl font-bold mb-2">StudyX</h2>
-                <p className="text-muted-foreground">Your Learning Companion</p>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Our Mission</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    StudyX is designed to bridge the gap between teachers and students, making task management
-                    and classroom collaboration seamless and efficient. We believe in empowering educators and
-                    learners with tools that simplify organization and enhance productivity.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Features</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>• Task management with priority levels</li>
-                    <li>• Classroom creation and management</li>
-                    <li>• Easy joining with invitation codes</li>
-                    <li>• Calendar view for all assignments</li>
-                    <li>• Progress tracking for students</li>
-                    <li>• Real-time updates and notifications</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Get Started</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Whether you're a teacher looking to organize your classroom or a student wanting to stay
-                    on top of assignments, StudyX is here to help. Create an account, join or create a classroom,
-                    and start managing your academic life more effectively!
-                  </p>
-                </CardContent>
-              </Card>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10 animate-gradient-shift"></div>
+      
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="max-w-4xl mx-auto space-y-8">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 shadow-2xl shadow-primary/20">
+              <GraduationCap className="w-14 h-14 text-primary-foreground" />
             </div>
+            <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+              About StudyX
+            </h1>
+            <p className="text-xl text-muted-foreground">Your Complete Learning Management Platform</p>
           </div>
-        </main>
+
+          {/* Mission */}
+          <Card className="border-primary/20 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl">Our Mission</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                StudyX is designed to revolutionize the educational experience by bridging the gap between teachers and students. 
+                Our platform makes task management and classroom collaboration seamless, efficient, and enjoyable.
+              </p>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                We believe in empowering educators and learners with intuitive tools that simplify organization, 
+                enhance productivity, and foster a collaborative learning environment where everyone can thrive.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Key Features */}
+          <Card className="border-accent/20 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl">Key Features</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center flex-shrink-0">
+                    <CheckSquare className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Smart Task Management</h4>
+                    <p className="text-muted-foreground">Priority levels, due dates, and progress tracking for all assignments</p>
+                  </div>
+                </div>
+                
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Users className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Classroom Collaboration</h4>
+                    <p className="text-muted-foreground">Easy classroom creation and joining with secure invitation codes</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Calendar Integration</h4>
+                    <p className="text-muted-foreground">Visualize all tasks and deadlines in an intuitive calendar view</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent/20 to-primary/10 flex items-center justify-center flex-shrink-0">
+                    <GraduationCap className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-1">Real-time Analytics</h4>
+                    <p className="text-muted-foreground">Track student progress and classroom performance instantly</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* How It Works */}
+          <Card className="border-primary/20 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl">How It Works</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-semibold text-lg mb-2 text-primary">For Teachers</h4>
+                  <ol className="list-decimal list-inside space-y-2 text-muted-foreground ml-4">
+                    <li>Create your account and set up your profile</li>
+                    <li>Create classrooms and generate unique invitation codes</li>
+                    <li>Add assignments with priority levels and due dates</li>
+                    <li>Monitor student progress and completion rates</li>
+                    <li>Analyze classroom performance with built-in analytics</li>
+                  </ol>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-lg mb-2 text-accent">For Students</h4>
+                  <ol className="list-decimal list-inside space-y-2 text-muted-foreground ml-4">
+                    <li>Sign up and complete your student profile</li>
+                    <li>Join classrooms using invitation codes from teachers</li>
+                    <li>View all assignments in an organized dashboard</li>
+                    <li>Track your progress and upcoming deadlines</li>
+                    <li>Stay organized with the calendar view</li>
+                  </ol>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contact Information */}
+          <Card className="border-accent/20 shadow-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl">Get In Touch</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Email</p>
+                    <p className="text-muted-foreground">support@studyx.edu</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-accent" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Phone</p>
+                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">Address</p>
+                    <p className="text-muted-foreground">123 Education Street, Learning City, ED 12345</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* CTA */}
+          <div className="text-center pt-8">
+            <Button 
+              size="lg"
+              onClick={() => navigate("/auth")}
+              className="text-lg px-12 py-7 h-auto rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-primary to-accent"
+            >
+              Get Started Today
+            </Button>
+          </div>
+        </div>
       </div>
-    </SidebarProvider>
+    </div>
   );
 };
 

@@ -18,58 +18,71 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/5">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg">
-              <GraduationCap className="w-12 h-12 text-primary-foreground" />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10 animate-gradient-shift"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(168,85,247,0.1),transparent_50%)] animate-pulse-slow"></div>
+      
+      <div className="container mx-auto px-4 py-20 relative z-10">
+        <div className="text-center mb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <div className="flex justify-center mb-8">
+            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/20 animate-float">
+              <GraduationCap className="w-16 h-16 text-primary-foreground" />
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary via-primary to-accent bg-clip-text text-transparent">
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient-x">
             Welcome to StudyX
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed">
             Streamline your classroom experience with intelligent task management, 
             seamless collaboration, and powerful organization tools.
           </p>
-          <div className="flex gap-4 justify-center">
-            <Button size="lg" onClick={() => navigate("/auth")}>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <Button 
+              size="lg" 
+              onClick={() => navigate("/auth")}
+              className="text-lg px-12 py-7 h-auto rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+            >
               Get Started
             </Button>
-            <Button size="lg" variant="outline" onClick={() => navigate("/about")}>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              onClick={() => navigate("/about")}
+              className="text-lg px-12 py-7 h-auto rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5"
+            >
               Learn More
             </Button>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mt-20">
-          <div className="bg-card rounded-lg p-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 border border-primary/10">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-4">
-              <CheckSquare className="w-6 h-6 text-primary" />
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-28">
+          <div className="group bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all hover:scale-105 duration-300 border border-primary/20 hover:border-primary/40">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <CheckSquare className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Task Management</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-2xl font-semibold mb-3">Task Management</h3>
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Organize assignments with priority levels, due dates, and progress tracking
             </p>
           </div>
 
-          <div className="bg-card rounded-lg p-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 border border-accent/10">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-4">
-              <Users className="w-6 h-6 text-accent" />
+          <div className="group bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all hover:scale-105 duration-300 border border-accent/20 hover:border-accent/40">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Users className="w-8 h-8 text-accent" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Classroom Collaboration</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-2xl font-semibold mb-3">Classroom Collaboration</h3>
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Teachers create classrooms, students join with invitation codes
             </p>
           </div>
 
-          <div className="bg-card rounded-lg p-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 duration-300 border border-primary/10">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/10 flex items-center justify-center mb-4">
-              <Calendar className="w-6 h-6 text-primary" />
+          <div className="group bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all hover:scale-105 duration-300 border border-primary/20 hover:border-accent/40">
+            <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary/30 to-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <Calendar className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Calendar View</h3>
-            <p className="text-muted-foreground">
+            <h3 className="text-2xl font-semibold mb-3">Calendar View</h3>
+            <p className="text-muted-foreground text-lg leading-relaxed">
               Visualize all tasks and deadlines in an intuitive calendar interface
             </p>
           </div>
