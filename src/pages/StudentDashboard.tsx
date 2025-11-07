@@ -145,46 +145,65 @@ const StudentDashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-background to-accent/5">
         <AppSidebar userRole={userRole || undefined} />
         <main className="flex-1 flex flex-col">
-          <header className="border-b bg-background px-6 py-4 flex items-center gap-4">
+          <header className="border-b bg-card/50 backdrop-blur-sm px-6 py-5 flex items-center gap-4 shadow-sm">
             <SidebarTrigger />
-            <h1 className="text-xl font-semibold">My Classrooms</h1>
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                My Classrooms
+              </h1>
+            </div>
           </header>
 
-          <div className="flex-1 p-6 space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold">Enrolled Classrooms</h2>
-              <Button onClick={() => setShowJoinDialog(true)}>
-                <Users className="w-4 h-4 mr-2" />
+          <div className="flex-1 p-6 space-y-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h2 className="text-3xl font-bold">Enrolled Classrooms</h2>
+                <p className="text-muted-foreground mt-1">Manage and view your classroom memberships</p>
+              </div>
+              <Button 
+                onClick={() => setShowJoinDialog(true)}
+                size="lg"
+                className="rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              >
+                <Users className="w-5 h-5 mr-2" />
                 Join Classroom
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {classrooms.map((classroom) => (
-                <Card key={classroom.id} className="hover:shadow-lg transition-shadow border-primary/10">
-                  <CardHeader>
+                <Card 
+                  key={classroom.id} 
+                  className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 border-primary/20 bg-card/80 backdrop-blur-sm rounded-2xl overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-accent/10 rounded-bl-full -mr-16 -mt-16"></div>
+                  <CardHeader className="relative">
                     <div className="flex justify-between items-start">
-                      <div>
-                        <CardTitle>{classroom.name}</CardTitle>
-                        <CardDescription className="flex items-center gap-1 mt-1">
-                          Code: {classroom.invitation_code}
-                        </CardDescription>
+                      <div className="flex-1">
+                        <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+                          {classroom.name}
+                        </CardTitle>
+                        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-3 py-1 rounded-lg text-sm font-mono font-semibold">
+                          <span className="text-xs">Code:</span>
+                          {classroom.invitation_code}
+                        </div>
                       </div>
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleLeaveClassroom(classroom.id)}
                         title="Leave classroom"
+                        className="rounded-lg hover:bg-destructive/10 hover:text-destructive"
                       >
                         <LogOut className="w-4 h-4" />
                       </Button>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
                       View tasks and assignments in the Dashboard
                     </p>
                   </CardContent>
@@ -193,10 +212,12 @@ const StudentDashboard = () => {
             </div>
 
             {classrooms.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground">
-                <Users className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg mb-2">No classrooms yet</p>
-                <p>Join a classroom using an invitation code to get started!</p>
+              <div className="text-center py-20 text-muted-foreground">
+                <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  <Users className="w-12 h-12 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-2 text-foreground">No classrooms yet</h3>
+                <p className="text-lg">Join a classroom using an invitation code to get started!</p>
               </div>
             )}
           </div>
@@ -204,13 +225,17 @@ const StudentDashboard = () => {
       </div>
 
       <Dialog open={showJoinDialog} onOpenChange={setShowJoinDialog}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Join Classroom</DialogTitle>
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Join Classroom
+            </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleJoinClassroom} className="space-y-4">
+          <form onSubmit={handleJoinClassroom} className="space-y-6">
             <div>
-              <Label htmlFor="invitationCode">Invitation Code</Label>
+              <Label htmlFor="invitationCode" className="text-base font-semibold">
+                Invitation Code
+              </Label>
               <Input
                 id="invitationCode"
                 placeholder="Enter 8-character code"
@@ -218,18 +243,26 @@ const StudentDashboard = () => {
                 onChange={(e) => setInvitationCode(e.target.value.toUpperCase())}
                 maxLength={8}
                 required
-                className="font-mono text-lg tracking-wider"
+                className="font-mono text-xl tracking-wider mt-2 h-14 rounded-xl border-primary/20 focus:border-primary/40"
               />
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-2">
                 Ask your teacher for the classroom invitation code
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button type="submit" className="flex-1">Join</Button>
+            <div className="flex gap-3">
+              <Button 
+                type="submit" 
+                size="lg"
+                className="flex-1 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              >
+                Join Now
+              </Button>
               <Button
                 type="button"
                 variant="outline"
+                size="lg"
                 onClick={() => setShowJoinDialog(false)}
+                className="rounded-xl"
               >
                 Cancel
               </Button>

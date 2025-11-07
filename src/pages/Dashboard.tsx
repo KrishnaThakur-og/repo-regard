@@ -193,17 +193,22 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-background to-primary/5">
         <AppSidebar userRole={userRole || undefined} />
         <main className="flex-1 flex flex-col">
-          <header className="border-b bg-background px-6 py-4 flex items-center gap-4">
+          <header className="border-b bg-card/50 backdrop-blur-sm px-6 py-5 flex items-center gap-4 shadow-sm">
             <SidebarTrigger />
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                {userRole === "teacher" ? "Teacher Dashboard" : "Student Dashboard"}
+              </h2>
+            </div>
             <div className="flex-1 max-w-md">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
-                  placeholder="Search the Task..."
-                  className="pl-10"
+                  placeholder="Search tasks..."
+                  className="pl-10 h-11 rounded-xl border-primary/20 focus:border-primary/40 transition-all"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -213,19 +218,26 @@ const Dashboard = () => {
 
           <div className="flex-1 p-6 space-y-6">
             {userRole === "teacher" && (
-              <div className="bg-card rounded-lg p-6 space-y-4">
+              <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-8 space-y-4 shadow-xl border border-primary/20">
                 {!showTaskForm ? (
-                  <Button onClick={() => setShowTaskForm(true)} className="w-full sm:w-auto">
-                    Add Task
+                  <Button 
+                    onClick={() => setShowTaskForm(true)} 
+                    size="lg"
+                    className="w-full sm:w-auto rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                  >
+                    Add New Task
                   </Button>
                 ) : (
-                  <form onSubmit={handleAddTask} className="space-y-4">
+                  <form onSubmit={handleAddTask} className="space-y-5">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">Add New Task</h3>
+                      <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                        Add New Task
+                      </h3>
                       <Button
                         type="button"
                         variant="ghost"
                         onClick={() => setShowTaskForm(false)}
+                        className="rounded-lg"
                       >
                         Cancel
                       </Button>
@@ -299,8 +311,12 @@ const Dashboard = () => {
                       />
                     </div>
 
-                    <Button type="submit" className="w-full sm:w-auto">
-                      Add Task
+                    <Button 
+                      type="submit" 
+                      size="lg"
+                      className="w-full sm:w-auto rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                    >
+                      Create Task
                     </Button>
                   </form>
                 )}
