@@ -20,6 +20,8 @@ interface Task {
   priority: "high" | "medium" | "low";
   due_date: string;
   classroom_id: string;
+  document_url?: string | null;
+  document_name?: string | null;
 }
 
 interface TaskCompletion {
@@ -43,6 +45,8 @@ const Dashboard = () => {
   const [taskDueDate, setTaskDueDate] = useState("");
   const [selectedClassroom, setSelectedClassroom] = useState<string>("");
   const [classrooms, setClassrooms] = useState<any[]>([]);
+  const [taskDocument, setTaskDocument] = useState<File | null>(null);
+  const [uploadingDocument, setUploadingDocument] = useState(false);
 
   useEffect(() => {
     checkAuthAndRole();
@@ -131,6 +135,29 @@ const Dashboard = () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return;
 
+    setUploadingDocument(true);
+    let documentUrl = null;
+    let documentName = null;
+
+    // Upload document if provided
+    if (taskDocument) {
+      const fileExt = taskDocument.name.split('.').pop();
+      const fileName = `${session.user.id}/${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('assignments')
+        .upload(fileName, taskDocument);
+
+      if (uploadError) {
+        toast.error("Failed to upload document");
+        setUploadingDocument(false);
+        return;
+      }
+
+      documentUrl = fileName;
+      documentName = taskDocument.name;
+    }
+
     const { error } = await supabase.from("tasks").insert({
       classroom_id: selectedClassroom,
       title: taskTitle,
@@ -138,7 +165,11 @@ const Dashboard = () => {
       priority: taskPriority,
       due_date: taskDueDate,
       created_by: session.user.id,
+      document_url: documentUrl,
+      document_name: documentName,
     });
+
+    setUploadingDocument(false);
 
     if (error) {
       toast.error("Failed to create task");
@@ -148,6 +179,7 @@ const Dashboard = () => {
       setTaskDescription("");
       setTaskPriority("medium");
       setTaskDueDate("");
+      setTaskDocument(null);
       setShowTaskForm(false);
       checkAuthAndRole(); // Reload tasks
     }
@@ -311,12 +343,28 @@ const Dashboard = () => {
                       />
                     </div>
 
+                    <div>
+                      <Label>Attach Document (Optional):</Label>
+                      <Input
+                        type="file"
+                        accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+                        onChange={(e) => setTaskDocument(e.target.files?.[0] || null)}
+                        className="cursor-pointer"
+                      />
+                      {taskDocument && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Selected: {taskDocument.name}
+                        </p>
+                      )}
+                    </div>
+
                     <Button 
                       type="submit" 
                       size="lg"
+                      disabled={uploadingDocument}
                       className="w-full sm:w-auto rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
                     >
-                      Create Task
+                      {uploadingDocument ? "Uploading..." : "Create Task"}
                     </Button>
                   </form>
                 )}
@@ -329,6 +377,7 @@ const Dashboard = () => {
                 return (
                   <TaskCard
                     key={task.id}
+                    taskId={task.id}
                     title={task.title}
                     description={task.description || undefined}
                     priority={task.priority}
@@ -340,6 +389,9 @@ const Dashboard = () => {
                         : undefined
                     }
                     showCheckbox={userRole === "student"}
+                    documentUrl={task.document_url}
+                    documentName={task.document_name}
+                    isStudent={userRole === "student"}
                   />
                 );
               })}
