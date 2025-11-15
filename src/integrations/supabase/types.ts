@@ -135,12 +135,52 @@ export type Database = {
           },
         ]
       }
+      task_submissions: {
+        Row: {
+          document_name: string
+          document_url: string
+          id: string
+          student_id: string
+          submitted_at: string
+          task_id: string
+          updated_at: string
+        }
+        Insert: {
+          document_name: string
+          document_url: string
+          id?: string
+          student_id: string
+          submitted_at?: string
+          task_id: string
+          updated_at?: string
+        }
+        Update: {
+          document_name?: string
+          document_url?: string
+          id?: string
+          student_id?: string
+          submitted_at?: string
+          task_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_submissions_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           classroom_id: string
           created_at: string
           created_by: string
           description: string | null
+          document_name: string | null
+          document_url: string | null
           due_date: string
           id: string
           priority: string
@@ -152,6 +192,8 @@ export type Database = {
           created_at?: string
           created_by: string
           description?: string | null
+          document_name?: string | null
+          document_url?: string | null
           due_date: string
           id?: string
           priority: string
@@ -163,6 +205,8 @@ export type Database = {
           created_at?: string
           created_by?: string
           description?: string | null
+          document_name?: string | null
+          document_url?: string | null
           due_date?: string
           id?: string
           priority?: string
