@@ -1,4 +1,4 @@
-import { CheckSquare, Calendar, BarChart3, ClipboardList, User, LogOut, GraduationCap, Info } from "lucide-react";
+import { CheckSquare, Calendar, BarChart3, ClipboardList, User, LogOut, GraduationCap, Info, MessageSquare } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Sidebar,
@@ -32,6 +32,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { title: "Calendar", url: "/calendar", icon: Calendar },
     { title: "Analytics", url: "/analytics", icon: BarChart3 },
     { title: "Assignments", url: "/assignments", icon: ClipboardList },
+    { title: "Chat", url: "/chat", icon: MessageSquare },
   ];
 
   const studentItems = [
@@ -39,6 +40,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
     { title: "Calendar", url: "/calendar", icon: Calendar },
     { title: "Analytics", url: "/analytics", icon: BarChart3 },
     { title: "My Classrooms", url: "/student-dashboard", icon: User },
+    { title: "Chat", url: "/chat", icon: MessageSquare },
   ];
 
   const items = userRole === "teacher" ? teacherItems : studentItems;
