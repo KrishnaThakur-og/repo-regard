@@ -89,31 +89,56 @@ export default function Chat() {
   };
 
   const fetchTeachers = async () => {
-    const { data: classrooms } = await supabase
+    // First get the classrooms the student is a member of
+    const { data: memberships } = await supabase
       .from("classroom_members")
-      .select(`
-        classroom_id,
-        classrooms (
-          id,
-          name,
-          teacher_id,
-          profiles (
-            id,
-            full_name
-          )
-        )
-      `)
+      .select("classroom_id")
       .eq("student_id", user.id);
 
-    if (classrooms) {
-      const teacherList: Teacher[] = classrooms.map((cm: any) => ({
-        id: cm.classrooms.teacher_id,
-        full_name: cm.classrooms.profiles.full_name,
-        classroom_id: cm.classrooms.id,
-        classroom_name: cm.classrooms.name,
-      }));
-      setTeachers(teacherList);
+    if (!memberships || memberships.length === 0) {
+      setTeachers([]);
+      return;
     }
+
+    const classroomIds = memberships.map(m => m.classroom_id);
+
+    // Get classroom details
+    const { data: classrooms } = await supabase
+      .from("classrooms")
+      .select("id, name, teacher_id")
+      .in("id", classroomIds);
+
+    if (!classrooms || classrooms.length === 0) {
+      setTeachers([]);
+      return;
+    }
+
+    // Get unique teacher IDs
+    const teacherIds = [...new Set(classrooms.map(c => c.teacher_id))];
+
+    // Get teacher profiles
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name")
+      .in("id", teacherIds);
+
+    if (!profiles) {
+      setTeachers([]);
+      return;
+    }
+
+    // Build teacher list with classroom info
+    const teacherList: Teacher[] = classrooms.map((classroom) => {
+      const profile = profiles.find(p => p.id === classroom.teacher_id);
+      return {
+        id: classroom.teacher_id,
+        full_name: profile?.full_name || "Unknown Teacher",
+        classroom_id: classroom.id,
+        classroom_name: classroom.name,
+      };
+    });
+
+    setTeachers(teacherList);
   };
 
   const selectTeacher = async (teacher: Teacher) => {
