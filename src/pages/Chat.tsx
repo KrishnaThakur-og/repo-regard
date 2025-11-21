@@ -132,7 +132,7 @@ export default function Chat() {
       const profile = profiles.find(p => p.id === classroom.teacher_id);
       return {
         id: classroom.teacher_id,
-        full_name: profile?.full_name || "Unknown Teacher",
+        full_name: profile?.full_name || classroom.name,
         classroom_id: classroom.id,
         classroom_name: classroom.name,
       };
