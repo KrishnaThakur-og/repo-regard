@@ -82,6 +82,9 @@ export default function Chat() {
 
     if (roleData) {
       setUserRole(roleData.role as "teacher" | "student");
+    } else {
+      toast.error("User role not found");
+      navigate("/auth");
     }
   };
 

@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NotificationBell } from "@/components/NotificationBell";
 import { Separator } from "@/components/ui/separator";
 
 interface AppSidebarProps {
@@ -120,7 +121,7 @@ export function AppSidebar({ userRole }: AppSidebarProps) {
       <SidebarFooter className="border-t border-sidebar-border">
         <div className="p-2 space-y-2">
           <div className="flex items-center justify-center gap-2">
-            {!collapsed && <span className="text-sm text-muted-foreground">Theme</span>}
+            <NotificationBell />
             <ThemeToggle />
           </div>
           <Button
